@@ -6,7 +6,7 @@ module.exports = {
     bundle: "./public/javascripts/main.ts",
   },
   output: {
-    path: __dirname + "./public/dist",
+    path: __dirname + "/public/dist",
     filename: "[name].js"
   },
   devtool: "source-map",
