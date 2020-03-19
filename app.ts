@@ -3,6 +3,7 @@ import * as express from "express";
 import * as path from "path"
 import * as cookieParser from "cookie-parser";
 import * as logger from "morgan";
+import { MongoClient } from "mongodb";
 
 import indexRouter from "./routes/index";
 
@@ -11,13 +12,21 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, "views"));
 app.set('view engine', 'ejs');
-console.log(app.get("views"));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+MongoClient.connect("mongodb://mongo:27017", (err, client) => {
+  if (!err) {
+    console.log("DB connection established");
+    app.locals.db = client.db("traction");
+  } else {
+    console.error(err);
+  }
+});
 
 app.use('/', indexRouter);
 
