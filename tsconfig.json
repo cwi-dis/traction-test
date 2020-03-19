@@ -9,8 +9,7 @@
     "lib": ["dom", "es2015"],
     "strictNullChecks": true,
     "keyofStringsOnly": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedLocals": true
   },
   "include": [
     "./public/javascripts/**/*.tsx",
