@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as session from "express-session";
+import * as connectMongo from "connect-mongo";
 import * as logger from "morgan";
 
 import * as path from "path"
@@ -18,12 +19,17 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+
+const MongoStore = connectMongo(session);
+
 app.use(session({
   secret: "vJa2/FiwYmBTCp+f3tWR9WySpR74GSLYKaFVrcWTJqU=",
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: false },
+  store: new MongoStore({ url: "mongodb://mongo:27017/traction" })
 }));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
