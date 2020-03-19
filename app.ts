@@ -1,8 +1,11 @@
-import * as createError from "http-errors";
 import * as express from "express";
-import * as path from "path"
-import * as cookieParser from "cookie-parser";
+import * as session from "express-session";
 import * as logger from "morgan";
+
+import * as path from "path"
+import * as createError from "http-errors";
+import * as cookieParser from "cookie-parser";
+
 import { MongoClient } from "mongodb";
 
 import indexRouter from "./routes/index";
@@ -15,6 +18,12 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(session({
+  secret: "vJa2/FiwYmBTCp+f3tWR9WySpR74GSLYKaFVrcWTJqU=",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
