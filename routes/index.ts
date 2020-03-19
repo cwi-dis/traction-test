@@ -39,8 +39,26 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/login", (req, res) => {
+router.post("/login", async (req, res) => {
+  const db = await getDatabase(req);
   const { username, password } = req.body;
+
+  const users = db.collection("users");
+  const loginSuccessful = await users.findOne({
+    username,
+    hash: hashPassword(password)
+  });
+
+  if (loginSuccessful) {
+    req.session!.loggedIn = true;
+    res.send({ status: "OK" });
+  } else {
+    res.status(401);
+    res.send({
+      status: "ERR",
+      message: "Authorisation failed"
+    });
+  }
 });
 
 export default router;
