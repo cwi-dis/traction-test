@@ -3,12 +3,15 @@ services:
   web:
     build: .
     command: yarn start
-    depends_on:
-      - mongo
     volumes:
       - .:/code
     ports:
       - "3000:3000"
+    depends_on:
+      - mongo
+    command: sh -c "/wait && yarn start"
+    environment:
+      - WAIT_HOSTS=mongo:27017
   mongo:
     image: mongo
     restart: always
