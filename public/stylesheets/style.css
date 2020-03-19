@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+.dropzone {
+  border: 2px dashed #999999;
+  border-radius: 3px;;
+}
+
+.dropzone-entered {
+  border: 2px dashed #555555;
+}
