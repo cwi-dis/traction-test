@@ -1,9 +1,9 @@
-FROM alpine:3.11
+FROM node:13.10.1-alpine3.10
 
 ADD . /code/
 WORKDIR /code
 
-RUN apk add --no-cache nodejs yarn git && \
+RUN apk add --no-cache yarn git && \
     yarn install && \
     yarn cache clean
 
