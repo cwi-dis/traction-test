@@ -63,3 +63,4 @@ typings/
 public/dist/
 backend.js*
 db/
+bin/
