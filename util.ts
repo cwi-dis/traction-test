@@ -3,6 +3,10 @@ import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
 
 export function hashPassword(password: string) {
+  if (!password) {
+    password = "";
+  }
+
   const sha265 = crypto.createHash("sha256");
   return sha265.update(password).digest("base64");
 }
