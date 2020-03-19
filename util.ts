@@ -16,7 +16,15 @@ export function generateAuthToken() {
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
-  next();
+  if (req.session && req.session.loggedIn === true) {
+    next();
+  } else {
+    res.status(401);
+    res.send({
+      status: "ERR",
+      message: "Authorisation required"
+    });
+  }
 }
 
 export function getDatabase(req: Request): Promise<Db> {
