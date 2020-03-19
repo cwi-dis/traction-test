@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/backend.js"
+    "start": "node --enable-source-maps ./bin/backend.js"
   },
   "dependencies": {
     "@types/express-session": "^1.17.0",
