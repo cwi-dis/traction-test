@@ -3,6 +3,8 @@ services:
   web:
     build: .
     command: yarn start
+    depends_on:
+      - mongo
     volumes:
       - .:/code
     ports:
