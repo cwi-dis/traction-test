@@ -1,5 +1,6 @@
 import * as crypto from "crypto";
 import { Request, Response, NextFunction } from "express";
+import { Db } from "mongodb";
 
 export function hashPassword(password: string) {
   const sha265 = crypto.createHash("sha256");
@@ -12,4 +13,16 @@ export function generateAuthToken() {
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   next();
+}
+
+export function getDatabase(req: Request): Promise<Db> {
+  const db: Db = req.app.locals.db;
+
+  return new Promise((resolve, reject) => {
+    if (db) {
+      resolve(db);
+    } else {
+      reject("Could not retrieve database client object");
+    }
+  });
 }
