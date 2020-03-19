@@ -13,15 +13,27 @@ router.post("/register", async (req, res) => {
 
   if (password === confirmation) {
     const users = db.collection("users");
-    const hash = hashPassword(password);
+    const userExists = await users.findOne({ username });
 
-    await users.insertOne({
-      username, hash
-    });
+    if (!userExists) {
+      const hash = hashPassword(password);
 
-    res.send({ status: "OK" });
+      await users.insertOne({
+        username, hash
+      });
+
+      res.send({ status: "OK" });
+    } else {
+      res.send({
+        status: "ERR",
+        message: "Username exists"
+      });
+    }
   } else {
-    res.send({ status: "ERR" });
+    res.send({
+      status: "ERR",
+      message: "Password does not match confirmation"
+    });
   }
 });
 
