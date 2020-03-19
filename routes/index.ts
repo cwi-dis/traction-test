@@ -1,10 +1,16 @@
 import { Router } from "express";
-import { getDatabase, hashPassword } from "../util";
+import { getDatabase, hashPassword, requireAuth } from "../util";
 
 const router = Router();
 
 router.get("/", (req, res, next) => {
   res.render("index", { title: "TRACTION" });
+});
+
+router.get("/upload", requireAuth, (req, res) => {
+  res.send({
+    status: "OK"
+  });
 });
 
 router.post("/register", async (req, res) => {
