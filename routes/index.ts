@@ -24,12 +24,14 @@ router.post("/register", async (req, res) => {
 
       res.send({ status: "OK" });
     } else {
+      res.status(400);
       res.send({
         status: "ERR",
         message: "Username exists"
       });
     }
   } else {
+    res.status(400);
     res.send({
       status: "ERR",
       message: "Password does not match confirmation"
