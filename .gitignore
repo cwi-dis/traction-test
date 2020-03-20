@@ -64,3 +64,4 @@ public/dist/
 backend.js*
 db/
 bin/
+aws.json
