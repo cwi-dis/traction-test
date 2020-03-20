@@ -3,6 +3,7 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { postFile } from "../util";
 
 import Dropzone from "./dropzone";
+import Login from "./login";
 
 interface AppProps {
 }
@@ -12,7 +13,10 @@ const App: React.FC<AppProps> = () => {
     <Router>
       <Switch>
         <Route path="/upload">
-          <Dropzone onFileDropped={(file) => postFile("/upload", file)} />
+          <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file)} />
+        </Route>
+        <Route path="/login">
+          <Login loginSuccess={() => console.log("Login succeeded")} />
         </Route>
         <Route path="/">
           <div>Hello World</div>

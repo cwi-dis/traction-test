@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 
 interface LoginProps {
-  loginSuccess: () => {};
+  loginSuccess: () => void;
 }
 
 const Login: React.FC<LoginProps> = (props) => {
@@ -29,6 +29,7 @@ const Login: React.FC<LoginProps> = (props) => {
         <input className="input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button
+          className="button is-info"
           disabled={username.length === 0 || password.length === 0}
           onClick={onSubmit}
         >
