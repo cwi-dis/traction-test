@@ -4,6 +4,7 @@ import { postFile } from "../util";
 
 import Dropzone from "./dropzone";
 import Login from "./login";
+import LogoutButton from "./logout_button";
 
 interface AppProps {
 }
@@ -17,6 +18,9 @@ const App: React.FC<AppProps> = () => {
         </Route>
         <Route path="/login">
           <Login loginSuccess={() => console.log("Login succeeded")} />
+        </Route>
+        <Route path="/logout">
+          <LogoutButton logoutSuccess={() => console.log("Logout succeeded")} />
         </Route>
         <Route path="/">
           <div>Hello World</div>
