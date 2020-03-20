@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as Busboy from "busboy";
 import * as aws from "aws-sdk";
-import { getDatabase, hashPassword, requireAuth } from "../util";
+import { getDatabase, hashPassword, requireAuth, isLoggedIn } from "../util";
 
 const router = Router();
 
@@ -96,9 +96,17 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  req.session!.destroy(() => {
-    res.send({ status: "OK" });
-  });
+  if (!isLoggedIn(req)) {
+    res.status(400);
+    res.send({
+      status: "ERR",
+      message: "Not logged in"
+    });
+  } else {
+    req.session!.destroy(() => {
+      res.send({ status: "OK" });
+    });
+  }
 });
 
 export default router;
