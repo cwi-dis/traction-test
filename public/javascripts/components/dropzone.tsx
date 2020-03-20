@@ -4,10 +4,11 @@ import * as classNames from "classnames";
 
 interface DropzoneProps {
   onFileDropped: (f: File) => void;
+  size: [number, number];
 }
 
 const Dropzone: React.FC<DropzoneProps> = (props) => {
-  const { onFileDropped } = props;
+  const { onFileDropped, size: [width, height] } = props;
   const [ dropzoneEntered, setDropzoneEntered ] = useState(false);
 
   const parseFormData = (e: React.DragEvent<HTMLDivElement>) => {
@@ -24,7 +25,7 @@ const Dropzone: React.FC<DropzoneProps> = (props) => {
   return (
     <div>
       <div
-        style={{ width: 300, height: 300 }}
+        style={{ width, height }}
         className={classNames("dropzone", { "dropzone-entered": dropzoneEntered })}
         onDragEnter={() => setDropzoneEntered(true)}
         onDragLeave={() => setDropzoneEntered(false)}
