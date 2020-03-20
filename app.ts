@@ -2,16 +2,17 @@ import * as express from "express";
 import * as session from "express-session";
 import * as connectMongo from "connect-mongo";
 import * as logger from "morgan";
-
 import * as path from "path"
 import * as createError from "http-errors";
 import * as cookieParser from "cookie-parser";
-
+import * as aws from "aws-sdk";
 import { MongoClient } from "mongodb";
 
 import indexRouter from "./routes/index";
 
 var app = express();
+
+aws.config.loadFromPath("./aws.json")
 
 // view engine setup
 app.set('views', path.join(__dirname, "views"));
