@@ -1,4 +1,6 @@
+import * as fs from "fs";
 import { Router } from "express";
+import * as Busboy from "busboy";
 import { getDatabase, hashPassword, requireAuth } from "../util";
 
 const router = Router();
@@ -7,10 +9,23 @@ router.get("/", (req, res, next) => {
   res.render("index", { title: "TRACTION" });
 });
 
-router.get("/upload", requireAuth, (req, res) => {
-  res.send({
-    status: "OK"
+router.post("/upload", requireAuth, (req, res) => {
+  const busboy = new Busboy({ headers: req.headers });
+
+  busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+    console.log("Receiving file:", fieldname, filename, encoding, mimetype);
+    file.pipe(fs.createWriteStream("/dev/null"));
   });
+
+  busboy.on("finish", () => {
+    console.log("File upload complete");
+
+    res.send({
+      status: "OK"
+    });
+  });
+
+  return req.pipe(busboy);
 });
 
 router.post("/register", async (req, res) => {
