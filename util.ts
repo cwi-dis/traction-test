@@ -16,7 +16,7 @@ export function generateAuthToken() {
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
-  if (req.session && req.session.loggedIn === true) {
+  if (isLoggedIn(req)) {
     next();
   } else {
     res.status(401);
@@ -25,6 +25,10 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       message: "Authorisation required"
     });
   }
+}
+
+export function isLoggedIn(req: Request): boolean {
+  return req.session && req.session.loggedIn;
 }
 
 export function getDatabase(req: Request): Promise<Db> {
