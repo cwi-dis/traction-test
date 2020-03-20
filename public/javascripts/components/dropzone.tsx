@@ -11,6 +11,8 @@ const Dropzone: React.FC<DropzoneProps> = (props) => {
   const [ dropzoneEntered, setDropzoneEntered ] = useState(false);
 
   const parseFormData = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
     console.log("File dropped");
     const file = e.dataTransfer.files.item(0);
 
@@ -22,6 +24,7 @@ const Dropzone: React.FC<DropzoneProps> = (props) => {
   return (
     <div>
       <div
+        style={{ width: 300, height: 300 }}
         className={classNames("dropzone", { "dropzone-entered": dropzoneEntered })}
         onDragEnter={() => setDropzoneEntered(true)}
         onDragLeave={() => setDropzoneEntered(false)}
