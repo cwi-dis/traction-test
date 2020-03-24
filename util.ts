@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
+import * as aws from "aws-sdk";
 
 export function hashPassword(password: string) {
   if (!password) {
@@ -41,4 +42,24 @@ export function getDatabase(req: Request): Promise<Db> {
       reject("Could not retrieve database client object");
     }
   });
+}
+
+export function uploadToS3(filename: string, file: aws.S3.Body, bucket = "troeggla-traction-test"): Promise<void> {
+  const s3 = new aws.S3();
+
+  return new Promise((resolve, reject) => {
+    s3.upload({
+      Bucket: bucket, Key: filename, Body: file
+    }, {
+      partSize: 5 * 1024 * 1024, queueSize: 10
+    }, (err, data) => {
+      if (err) {
+        console.error("ERROR:", err);
+        reject(err);
+      } else {
+        console.log(data);
+        resolve();
+      }
+    });
+  })
 }
