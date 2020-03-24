@@ -93,7 +93,7 @@ export function encodeDash(input: string): Promise<void> {
     Playlists: [
       {
         Format: "MPEG-DASH",
-        Name: "index",
+        Name: `${input}.mpd`,
         OutputKeys: [
           `dash-4m-${input}`,
           `dash-2m-${input}`,
