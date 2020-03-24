@@ -63,3 +63,58 @@ export function uploadToS3(filename: string, file: aws.S3.Body, bucket = "troegg
     });
   })
 }
+
+export function encodeDash(input: string): Promise<void> {
+  const params = {
+    PipelineId: "1584459675334-t9xv53",
+    Input: {
+      Key: input,
+    },
+    OutputKeyPrefix: "transcoded/",
+    Outputs: [
+      {
+        Key: `dash-4m-${input}`,
+        PresetId: "1351620000001-500020",
+        SegmentDuration: "10"
+      }, {
+        Key: `dash-2m-${input}`,
+        PresetId: "1351620000001-500030",
+        SegmentDuration: "10"
+      }, {
+        Key: `dash-1m-${input}`,
+        PresetId: "1351620000001-500040",
+        SegmentDuration: "10"
+      }, {
+        Key: `dash-audio-${input}`,
+        PresetId: "1351620000001-500060",
+        SegmentDuration: "10"
+      }
+    ],
+    Playlists: [
+      {
+        Format: "MPEG-DASH",
+        Name: "index",
+        OutputKeys: [
+          `dash-4m-${input}`,
+          `dash-2m-${input}`,
+          `dash-1m-${input}`,
+          `dash-audio-${input}`,
+        ],
+      },
+    ]
+  };
+
+  return new Promise((resolve, reject) => {
+    const transcoder = new aws.ElasticTranscoder();
+
+    transcoder.createJob(params, (err, data) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log(data);
+        resolve();
+      }
+    });
+  });
+}
