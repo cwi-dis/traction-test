@@ -65,6 +65,8 @@ export function uploadToS3(filename: string, file: aws.S3.Body, bucket = "troegg
 }
 
 export function encodeDash(input: string): Promise<void> {
+  const inputBasename = input.split(".");
+
   const params = {
     PipelineId: "1584459675334-t9xv53",
     Input: {
@@ -73,19 +75,19 @@ export function encodeDash(input: string): Promise<void> {
     OutputKeyPrefix: "transcoded/",
     Outputs: [
       {
-        Key: `dash-4m-${input}`,
+        Key: `dash-4m-${inputBasename}`,
         PresetId: "1351620000001-500020",
         SegmentDuration: "10"
       }, {
-        Key: `dash-2m-${input}`,
+        Key: `dash-2m-${inputBasename}`,
         PresetId: "1351620000001-500030",
         SegmentDuration: "10"
       }, {
-        Key: `dash-1m-${input}`,
+        Key: `dash-1m-${inputBasename}`,
         PresetId: "1351620000001-500040",
         SegmentDuration: "10"
       }, {
-        Key: `dash-audio-${input}`,
+        Key: `dash-audio-${inputBasename}`,
         PresetId: "1351620000001-500060",
         SegmentDuration: "10"
       }
@@ -93,12 +95,12 @@ export function encodeDash(input: string): Promise<void> {
     Playlists: [
       {
         Format: "MPEG-DASH",
-        Name: `${input}.mpd`,
+        Name: `${inputBasename}.mpd`,
         OutputKeys: [
-          `dash-4m-${input}`,
-          `dash-2m-${input}`,
-          `dash-1m-${input}`,
-          `dash-audio-${input}`,
+          `dash-4m-${inputBasename}`,
+          `dash-2m-${inputBasename}`,
+          `dash-1m-${inputBasename}`,
+          `dash-audio-${inputBasename}`,
         ],
       },
     ]
