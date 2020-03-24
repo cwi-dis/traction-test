@@ -1,7 +1,6 @@
 import { Router } from "express";
 import * as Busboy from "busboy";
-import * as aws from "aws-sdk";
-import { getDatabase, hashPassword, requireAuth, isLoggedIn } from "../util";
+import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3 } from "../util";
 
 const router = Router();
 
@@ -11,31 +10,22 @@ router.get("/", (req, res, next) => {
 
 router.post("/upload", requireAuth, (req, res) => {
   const busboy = new Busboy({ headers: req.headers });
-  const s3 = new aws.S3();
 
-  busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+  busboy.on("file", async (fieldname, file, filename, encoding, mimetype) => {
     console.log("Receiving file:", fieldname, filename, encoding, mimetype);
 
-    s3.upload({
-      Bucket: "troeggla-traction-test", Key: filename, Body: file
-    }, {
-      partSize: 5 * 1024 * 1024, queueSize: 10
-    }, (err, data) => {
-      if (err) {
-        console.error("ERROR:", err);
+    try {
+      await uploadToS3(filename, file);
 
-        res.send({
-          status: "ERR",
-          message: "Could not upload to S3"
-        });
-      } else {
-        console.log(data);
-
-        res.send({
-          status: "OK"
-        });
-      }
-    });
+      res.send({
+        status: "OK"
+      });
+    } catch {
+      res.send({
+        status: "ERR",
+        message: "Could not upload to S3"
+      });
+    }
   });
 
   req.pipe(busboy);
