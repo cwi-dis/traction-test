@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as Busboy from "busboy";
-import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3 } from "../util";
+import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash } from "../util";
 
 const router = Router();
 
@@ -16,6 +16,7 @@ router.post("/upload", requireAuth, (req, res) => {
 
     try {
       await uploadToS3(filename, file);
+      encodeDash(filename);
 
       res.send({
         status: "OK"
