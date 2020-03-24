@@ -65,7 +65,7 @@ export function uploadToS3(filename: string, file: aws.S3.Body, bucket = "troegg
 }
 
 export function encodeDash(input: string): Promise<void> {
-  const inputBasename = input.split(".");
+  const inputBasename = input.split(".")[0];
 
   const params = {
     PipelineId: "1584459675334-t9xv53",
@@ -95,7 +95,7 @@ export function encodeDash(input: string): Promise<void> {
     Playlists: [
       {
         Format: "MPEG-DASH",
-        Name: `${inputBasename}.mpd`,
+        Name: `${inputBasename}`,
         OutputKeys: [
           `dash-4m-${inputBasename}`,
           `dash-2m-${inputBasename}`,
