@@ -150,3 +150,23 @@ export function subscribeToSNSTopic(): Promise<void> {
     });
   });
 }
+
+export function confirmSubscription(headers: { "x-amz-sns-topic-arn": string, "x-amz-sns-message-type": string }, body: {Token: string}): Promise<string>{
+  console.log("Confirming subscription:", headers, body);
+  const sns = new aws.SNS();
+
+  return new Promise(((resolve, reject) =>{
+      sns.confirmSubscription({
+        TopicArn: headers['x-amz-sns-topic-arn'],
+        Token : body.Token
+      }, (err, res) => {
+          if (err) {
+            console.log(err);
+            return reject(err)
+          }
+
+          return resolve(res.SubscriptionArn);
+      });
+  }))
+
+}
