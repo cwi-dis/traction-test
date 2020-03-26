@@ -122,3 +122,11 @@ export function encodeDash(input: string): Promise<void> {
     });
   });
 }
+
+export function snsMiddleware(req: Request, res: Response, next: NextFunction) {
+  if (req.headers["x-amz-sns-message-type"]) {
+    req.headers["content-type"] = "application/json;charset=UTF-8";
+  }
+
+  next();
+}

@@ -12,6 +12,7 @@ import * as aws from "aws-sdk";
 import { MongoClient } from "mongodb";
 
 import indexRouter from "./routes/index";
+import { snsMiddleware } from "./util";
 
 var app = express();
 
@@ -21,6 +22,7 @@ aws.config.loadFromPath("./aws.json")
 app.set('views', path.join(__dirname, "views"));
 app.set('view engine', 'ejs');
 
+app.use(snsMiddleware);
 app.use(logger('dev'));
 app.use(express.json());
 
