@@ -151,6 +151,22 @@ export function subscribeToSNSTopic(arn: string, endpoint: string): Promise<void
   });
 }
 
+export function unsubscribeFromSNSTopic(arn: string): Promise<void> {
+  const sns = new aws.SNS();
+
+  return new Promise((resolve, reject) => {
+    sns.unsubscribe({
+      SubscriptionArn: arn
+    }, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
 export function confirmSubscription(headers: { "x-amz-sns-topic-arn": string, "x-amz-sns-message-type": string }, body: {Token: string}): Promise<string>{
   console.log("Confirming subscription:", headers, body);
   const sns = new aws.SNS();
