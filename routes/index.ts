@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as Busboy from "busboy";
-import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash } from "../util";
+import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash, confirmSubscription } from "../util";
 
 const router = Router();
 
@@ -97,6 +97,14 @@ router.post("/logout", (req, res) => {
     req.session!.destroy(() => {
       res.send({ status: "OK" });
     });
+  }
+});
+
+router.post("/sns", (req, res) => {
+  if (req.headers['x-amz-sns-message-type'] === 'SubscriptionConfirmation') {
+    confirmSubscription(req.headers as any, req.body);
+  } else {
+    console.log("SNS notification:", req.headers, req.body);
   }
 });
 
