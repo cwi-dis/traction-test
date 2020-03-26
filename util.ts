@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
 import * as aws from "aws-sdk";
 
-const { BUCKET_NAME, ETS_PIPELINE } = process.env;
+const { BUCKET_NAME, ETS_PIPELINE, SNS_ARN, SNS_ENDPOINT } = process.env;
 
 export function hashPassword(password: string) {
   if (!password) {
@@ -129,4 +129,24 @@ export function snsMiddleware(req: Request, res: Response, next: NextFunction) {
   }
 
   next();
+}
+
+export function subscribeToSNSTopic(): Promise<void> {
+  const sns = new aws.SNS();
+
+  return new Promise((resolve, reject) => {
+    sns.subscribe({
+      Protocol: "https",
+      TopicArn: SNS_ARN!,
+      Endpoint: `${SNS_ENDPOINT}/sns`
+    }, (err, data) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        console.log(data);
+        resolve();
+      }
+    });
+  });
 }
