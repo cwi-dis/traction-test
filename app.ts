@@ -14,10 +14,12 @@ import { MongoClient } from "mongodb";
 import indexRouter from "./routes/index";
 import { snsMiddleware, subscribeToSNSTopic } from "./util";
 
+const { SESSION_SECRET, DB_URL, SNS_ARN, SNS_ENDPOINT } = process.env;
+
 var app = express();
 
 aws.config.loadFromPath("./aws.json")
-subscribeToSNSTopic();
+subscribeToSNSTopic(SNS_ARN!, `${SNS_ENDPOINT!}/sns`);
 
 // view engine setup
 app.set('views', path.join(__dirname, "views"));
@@ -28,7 +30,6 @@ app.use(logger('dev'));
 app.use(express.json());
 
 const MongoStore = connectMongo(session);
-const { SESSION_SECRET, DB_URL } = process.env;
 
 app.use(session({
   secret: SESSION_SECRET!,
