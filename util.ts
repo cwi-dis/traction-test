@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
 import * as aws from "aws-sdk";
 
+const { BUCKET_NAME, ETS_PIPELINE } = process.env;
+
 export function hashPassword(password: string) {
   if (!password) {
     password = "";
@@ -44,7 +46,7 @@ export function getDatabase(req: Request): Promise<Db> {
   });
 }
 
-export function uploadToS3(filename: string, file: aws.S3.Body, bucket = "troeggla-traction-test"): Promise<void> {
+export function uploadToS3(filename: string, file: aws.S3.Body, bucket = BUCKET_NAME!): Promise<void> {
   const s3 = new aws.S3();
 
   return new Promise((resolve, reject) => {
@@ -68,7 +70,7 @@ export function encodeDash(input: string): Promise<void> {
   const inputBasename = input.split(".")[0];
 
   const params = {
-    PipelineId: "1584459675334-t9xv53",
+    PipelineId: ETS_PIPELINE!,
     Input: {
       Key: input,
     },

@@ -1,3 +1,6 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+
 import * as express from "express";
 import * as session from "express-session";
 import * as connectMongo from "connect-mongo";
@@ -22,20 +25,21 @@ app.use(logger('dev'));
 app.use(express.json());
 
 const MongoStore = connectMongo(session);
+const { SESSION_SECRET, DB_URL } = process.env;
 
 app.use(session({
-  secret: "vJa2/FiwYmBTCp+f3tWR9WySpR74GSLYKaFVrcWTJqU=",
+  secret: SESSION_SECRET!,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false },
-  store: new MongoStore({ url: "mongodb://mongo:27017/traction" })
+  store: new MongoStore({ url: `${DB_URL!}/traction` })
 }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-MongoClient.connect("mongodb://mongo:27017", (err, client) => {
+MongoClient.connect(DB_URL!, (err, client) => {
   if (!err) {
     console.log("DB connection established");
     app.locals.db = client.db("traction");
