@@ -12,11 +12,12 @@ import * as aws from "aws-sdk";
 import { MongoClient } from "mongodb";
 
 import indexRouter from "./routes/index";
-import { snsMiddleware } from "./util";
+import { snsMiddleware, subscribeToSNSTopic } from "./util";
 
 var app = express();
 
 aws.config.loadFromPath("./aws.json")
+subscribeToSNSTopic();
 
 // view engine setup
 app.set('views', path.join(__dirname, "views"));
