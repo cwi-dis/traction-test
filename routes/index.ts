@@ -122,7 +122,7 @@ router.post("/sns", async (req, res) => {
 
       if (data["state"] == "COMPLETED") {
         const db = await getDatabase(req);
-        console.log("Inserting video metadata:", insertVideoMetadata(db, data));
+        console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
       } else {
         console.error("Transcoder error:", data);
       }
