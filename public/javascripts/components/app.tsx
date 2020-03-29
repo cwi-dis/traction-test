@@ -5,8 +5,8 @@ import { postFile } from "../util";
 
 import Dropzone from "./dropzone";
 import Login from "./login";
-import LogoutButton from "./logout_button";
 import DashPlayer from "./dash_player";
+import Header from "./header";
 
 interface AppProps {
 }
@@ -28,12 +28,11 @@ const App: React.FC<AppProps> = () => {
   const renderRouter = () => {
     return (
       <Router>
+        <Header />
+
         <Switch>
           <Route path="/upload">
-            <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file)} />
-          </Route>
-          <Route path="/logout">
-            <LogoutButton logoutSuccess={() => console.log("Logout succeeded")} />
+            <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file, () => {})} />
           </Route>
           <Route path="/video">
             <DashPlayer width={700} manifest="https://d376bim64wsdac.cloudfront.net/transcoded/3ac8ef6c-5fea-424b-85c2-8caee29f6439.mpd" />
