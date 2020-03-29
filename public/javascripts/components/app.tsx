@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 
 import Login from "./login";
-import DashPlayer from "./dash_player";
+import Video from "./video";
 import Header from "./header";
 import VideoStream from "./video_stream";
 import VideoUpload from "./video_upload";
@@ -36,8 +36,8 @@ const App: React.FC<AppProps> = () => {
               <Route path="/upload">
                 <VideoUpload />
               </Route>
-              <Route path="/video">
-                <DashPlayer width={700} manifest="https://d376bim64wsdac.cloudfront.net/transcoded/3ac8ef6c-5fea-424b-85c2-8caee29f6439.mpd" />
+              <Route path="/video/:id">
+                <Video />
               </Route>
               <Route path="/">
                 <VideoStream />
