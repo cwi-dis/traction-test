@@ -30,17 +30,21 @@ const App: React.FC<AppProps> = () => {
       <Router>
         <Header />
 
-        <Switch>
-          <Route path="/upload">
-            <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file, () => {})} />
-          </Route>
-          <Route path="/video">
-            <DashPlayer width={700} manifest="https://d376bim64wsdac.cloudfront.net/transcoded/3ac8ef6c-5fea-424b-85c2-8caee29f6439.mpd" />
-          </Route>
-          <Route path="/">
-            <div>Hello World</div>
-          </Route>
-        </Switch>
+        <div className="columns" style={{ marginTop: 15 }}>
+          <div className="column is-three-quarters is-offset-one-quarter">
+            <Switch>
+              <Route path="/upload">
+                <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file, () => {})} />
+              </Route>
+              <Route path="/video">
+                <DashPlayer width={700} manifest="https://d376bim64wsdac.cloudfront.net/transcoded/3ac8ef6c-5fea-424b-85c2-8caee29f6439.mpd" />
+              </Route>
+              <Route path="/">
+                <div>Hello World</div>
+              </Route>
+            </Switch>
+          </div>
+        </div>
       </Router>
     );
   };
