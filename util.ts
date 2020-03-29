@@ -186,3 +186,13 @@ export function confirmSubscription(headers: { "x-amz-sns-topic-arn": string, "x
   }))
 
 }
+
+export function getFileExtension(filename: string): string {
+  const parts = filename.split(".");
+
+  if (parts.length == 1) {
+    return "";
+  }
+
+  return "." + parts[parts.length - 1];
+}
