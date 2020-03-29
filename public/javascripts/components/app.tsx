@@ -1,13 +1,12 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import { postFile } from "../util";
 
-import Dropzone from "./dropzone";
 import Login from "./login";
 import DashPlayer from "./dash_player";
 import Header from "./header";
 import VideoStream from "./video_stream";
+import VideoUpload from "./video_upload";
 
 interface AppProps {
 }
@@ -35,7 +34,7 @@ const App: React.FC<AppProps> = () => {
           <div className="column is-8 is-offset-2">
             <Switch>
               <Route path="/upload">
-                <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file, () => {})} />
+                <VideoUpload />
               </Route>
               <Route path="/video">
                 <DashPlayer width={700} manifest="https://d376bim64wsdac.cloudfront.net/transcoded/3ac8ef6c-5fea-424b-85c2-8caee29f6439.mpd" />
