@@ -7,7 +7,7 @@ import {
   confirmSubscription, getFileExtension, insertVideoMetadata
 } from "../util";
 
-const { SNS_ARN } = process.env;
+const { CLOUDFRONT_URL, SNS_ARN } = process.env;
 const router = Router();
 
 router.get("/", (req, res, next) => {
@@ -19,6 +19,27 @@ router.get("/videos", requireAuth, async (req, res) => {
   const videos = await db.collection("videos").find().sort("_id", -1).toArray();
 
   res.send(videos);
+});
+
+router.get("/video/:id", requireAuth, async (req, res) => {
+  const { id } = req.params;
+
+  const db = await getDatabase(req);
+  const video = await db.collection("videos").findOne({ name: id });
+
+  if (video) {
+    res.send({
+      name: id,
+      manifest: `${CLOUDFRONT_URL!}/transcoded/${id.split(".")[0]}.mpd`
+    });
+  } else {
+    res.status(404);
+    res.send({
+      status: "ERR",
+      message: "Video not found"
+    });
+  }
+
 });
 
 router.post("/upload", requireAuth, (req, res) => {
