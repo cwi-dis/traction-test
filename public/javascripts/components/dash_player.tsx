@@ -6,18 +6,19 @@ import "videojs-contrib-dash";
 
 interface DashPlayerProps {
   manifest: string;
+  width: number;
 }
 
 const DashPlayer: React.FC<DashPlayerProps> = (props) => {
   const videoNode = useRef<HTMLVideoElement>(null);
-  const { manifest } = props;
+  const { manifest, width } = props;
 
   useEffect(() => {
     if (videoNode === null) {
       return;
     }
 
-    const player = videojs(videoNode.current, { autoplay: true, controls: true }, () => {
+    const player = videojs(videoNode.current, { width, autoplay: true, controls: true }, () => {
       console.log("Video player ready");
 
       player.src({
