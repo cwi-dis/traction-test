@@ -2,8 +2,12 @@ import { Router } from "express";
 import * as Busboy from "busboy";
 import { v4 as uuid4 } from "uuid";
 
-import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash, confirmSubscription, getFileExtension } from "../util";
+import {
+  getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash,
+  confirmSubscription, getFileExtension, insertVideoMetadata
+} from "../util";
 
+const { SNS_ARN } = process.env;
 const router = Router();
 
 router.get("/", (req, res, next) => {
@@ -106,11 +110,24 @@ router.post("/logout", (req, res) => {
   }
 });
 
-router.post("/sns", (req, res) => {
+router.post("/sns", async (req, res) => {
   if (req.headers['x-amz-sns-message-type'] === 'SubscriptionConfirmation') {
     confirmSubscription(req.headers as any, req.body);
   } else {
     console.log("SNS notification:", req.headers, req.body);
+    const topic = req.headers["x-amz-sns-topic-arn"];
+
+    if (topic && topic === SNS_ARN!) {
+      console.log("Received transcoder notification");
+      const data = JSON.parse(req.body.Message);
+
+      if (data["state"] == "COMPLETED") {
+        const db = await getDatabase(req);
+        console.log("Inserting video metadata:", insertVideoMetadata(db, data));
+      } else {
+        console.error("Transcoder error:", data);
+      }
+    }
   }
 });
 
