@@ -196,3 +196,15 @@ export function getFileExtension(filename: string): string {
 
   return "." + parts[parts.length - 1];
 }
+
+export async function insertVideoMetadata(db: Db, data: any) {
+  const videos = db.collection("videos");
+
+  const result = await videos.insertOne({
+    name: data.input.key,
+    resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
+    duration: data.outputs[0].duration
+  })
+
+  return result.insertedCount === 1;
+}
