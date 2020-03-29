@@ -7,10 +7,22 @@ a {
 }
 
 .dropzone {
-  border: 2px dashed #999999;
-  border-radius: 3px;;
+  border: 4px dashed #999999;
+  border-radius: 7px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+}
+
+.dropzone div {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .dropzone-entered {
-  border: 2px dashed #555555;
+  border: 4px dashed #E2E2E2;
+  color: #E2E2E2;
 }

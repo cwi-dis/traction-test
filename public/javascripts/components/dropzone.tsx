@@ -4,7 +4,7 @@ import * as classNames from "classnames";
 
 interface DropzoneProps {
   onFileDropped: (f: File) => void;
-  size: [number, number];
+  size: [number | string, number | string];
 }
 
 const Dropzone: React.FC<DropzoneProps> = (props) => {
@@ -32,7 +32,7 @@ const Dropzone: React.FC<DropzoneProps> = (props) => {
         onDragOver={(e) => e.preventDefault()}
         onDrop={parseFormData}
       >
-        Drop a file here
+        <div>Drop a file here</div>
       </div>
     </div>
   );
