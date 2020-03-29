@@ -50,7 +50,7 @@ const App: React.FC<AppProps> = () => {
   };
 
   return (
-    (loginStatus) ? renderRouter() : <Login loginSuccess={() => location.href = "/"} />
+    (loginStatus == undefined) ? null : (loginStatus == true) ? renderRouter() : <Login loginSuccess={() => location.href = "/"} />
   );
 }
 
