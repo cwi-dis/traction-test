@@ -96,6 +96,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/loginstatus", (req, res) => {
+  res.send({
+    status: req.session?.loggedIn || false
+  });
+});
+
 router.post("/logout", (req, res) => {
   if (!isLoggedIn(req)) {
     res.status(400);
