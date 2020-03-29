@@ -7,6 +7,7 @@ import Dropzone from "./dropzone";
 import Login from "./login";
 import DashPlayer from "./dash_player";
 import Header from "./header";
+import VideoStream from "./video_stream";
 
 interface AppProps {
 }
@@ -40,7 +41,7 @@ const App: React.FC<AppProps> = () => {
                 <DashPlayer width={700} manifest="https://d376bim64wsdac.cloudfront.net/transcoded/3ac8ef6c-5fea-424b-85c2-8caee29f6439.mpd" />
               </Route>
               <Route path="/">
-                <div>Hello World</div>
+                <VideoStream />
               </Route>
             </Switch>
           </div>
