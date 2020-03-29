@@ -47,7 +47,7 @@ const App: React.FC<AppProps> = () => {
   };
 
   return (
-    (loginStatus) ? renderRouter() : <Login loginSuccess={() => console.log("Login succeeded")} />
+    (loginStatus) ? renderRouter() : <Login loginSuccess={() => location.href = "/"} />
   );
 }
 
