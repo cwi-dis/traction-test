@@ -1,6 +1,8 @@
 import { Router } from "express";
 import * as Busboy from "busboy";
-import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash, confirmSubscription } from "../util";
+import { v4 as uuid4 } from "uuid";
+
+import { getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash, confirmSubscription, getFileExtension } from "../util";
 
 const router = Router();
 
@@ -14,9 +16,13 @@ router.post("/upload", requireAuth, (req, res) => {
   busboy.on("file", async (fieldname, file, filename, encoding, mimetype) => {
     console.log("Receiving file:", fieldname, filename, encoding, mimetype);
 
+    const extension = getFileExtension(filename);
+    const newName = uuid4() + extension;
+
     try {
-      await uploadToS3(filename, file);
-      encodeDash(filename);
+      await uploadToS3(newName, file);
+      console.log("File saved as", newName)
+      encodeDash(newName);
 
       res.send({
         status: "OK"
