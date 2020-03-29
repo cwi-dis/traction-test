@@ -114,7 +114,6 @@ router.post("/sns", async (req, res) => {
   if (req.headers['x-amz-sns-message-type'] === 'SubscriptionConfirmation') {
     confirmSubscription(req.headers as any, req.body);
   } else {
-    console.log("SNS notification:", req.headers, req.body);
     const topic = req.headers["x-amz-sns-topic-arn"];
 
     if (topic && topic === SNS_ARN!) {

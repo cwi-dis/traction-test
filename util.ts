@@ -200,8 +200,17 @@ export function getFileExtension(filename: string): string {
 export async function insertVideoMetadata(db: Db, data: any) {
   const videos = db.collection("videos");
 
+  const { jobId } = data;
+  const entryExists = await videos.findOne({ jobId });
+
+  if (entryExists) {
+    console.log("Not inserting duplicate entry");
+    return false;
+  }
+
   const result = await videos.insertOne({
     name: data.input.key,
+    jobId,
     resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
     duration: data.outputs[0].duration
   })
