@@ -14,6 +14,13 @@ router.get("/", (req, res, next) => {
   res.render("index", { title: "TRACTION" });
 });
 
+router.get("/videos", requireAuth, async (req, res) => {
+  const db = await getDatabase(req);
+  const videos = await db.collection("videos").find().sort("_id", -1).toArray();
+
+  res.send(videos);
+});
+
 router.post("/upload", requireAuth, (req, res) => {
   const busboy = new Busboy({ headers: req.headers });
 
