@@ -24,17 +24,36 @@ const Login: React.FC<LoginProps> = (props) => {
   }
 
   return (
-    <div>
-      <div>
-        <input className="input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button
-          className="button is-info"
-          disabled={username.length === 0 || password.length === 0}
-          onClick={onSubmit}
-        >
-          Submit
-        </button>
+    <div className="columns">
+      <div className="box column is-one-third is-offset-one-third" style={{ marginTop: "20vh" }}>
+        <div>
+          <div className="field">
+            <label className="label">Username</label>
+            <div className="control">
+              <input className="input" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="field">
+            <label className="label">Password</label>
+            <div className="control">
+              <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+          </div>
+
+          <div className="field">
+            <div className="control">
+              <button
+                className="button is-info"
+                disabled={username.length === 0 || password.length === 0}
+                onClick={onSubmit}
+              >
+                Login
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   );
