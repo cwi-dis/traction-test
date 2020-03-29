@@ -31,7 +31,7 @@ const App: React.FC<AppProps> = () => {
         <Header />
 
         <div className="columns" style={{ marginTop: 15 }}>
-          <div className="column is-three-quarters is-offset-one-quarter">
+          <div className="column is-8 is-offset-2">
             <Switch>
               <Route path="/upload">
                 <Dropzone size={[300, 300]} onFileDropped={(file) => postFile("/upload", file, () => {})} />
