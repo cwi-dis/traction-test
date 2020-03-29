@@ -26,3 +26,10 @@ a {
   border: 4px dashed #E2E2E2;
   color: #E2E2E2;
 }
+
+.progresscontainer {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
