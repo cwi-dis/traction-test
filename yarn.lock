@@ -172,6 +172,11 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
+"@types/uuid@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-7.0.2.tgz#d680a9c596ef84abf5c4c07a32ffd66d582526f8"
+  integrity sha512-8Ly3zIPTnT0/8RCU6Kg/G3uTICf9sRwYOpUzSIM3503tLIKcnJPRuinHhXngJUy2MntrEf6dlpOHXJju90Qh5w==
+
 "@types/video.js@^7.3.3":
   version "7.3.3"
   resolved "https://registry.yarnpkg.com/@types/video.js/-/video.js-7.3.3.tgz#b6870d954473dfd694e10b55a90c0f3be8522da3"
