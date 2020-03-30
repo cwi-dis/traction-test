@@ -42,9 +42,10 @@ through services contained in the project `localstack` which aims to be a
 plug-and-play replacement for AWS in local environments. One could go even
 further and replace SNS through Pub/Sub channels provided by Redis running in a
 Docker container. While `localstack` does not contain a replacement for `ETS`,
-one could wrap this into a container running `ffmpeg` to which transcoding jobs
-are submitted through a messaging system. One thing that cannot be replaced
-locally is CloudFront, for obvious reasons, since it relies on the geospatial
+one could wrap this into a container running `ffmpeg` (see for example
+https://rybakov.com/blog/mpeg-dash/) to which transcoding jobs are submitted
+through a messaging system. One thing that cannot be replaced locally is
+CloudFront, for obvious reasons, since it relies on the geospatial
 infrastructure to achieve caching and fast delivery. This is of lesser
 importance when running locally, though, since CloudFront simply acts a caching
 layer for static assets and has little bearing on application functionality
