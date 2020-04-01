@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 
 interface VideoData {
   name: string;
-  resolutions: Array<number>;
-  duration: number;
+  resolutions?: Array<number>;
+  duration?: number;
+  status: string;
 }
 
 interface VideoStreamProps {
@@ -33,8 +34,9 @@ const VideoStream: React.FC<VideoStreamProps> = (props) => {
           <div key={i} className="box">
             <Link to={`/video/${v.name}`}>{v.name}</Link>
             <hr/>
-            <b>Available resolutions:</b> {v.resolutions.join(", ")}<br/>
-            <b>Duration:</b> {v.duration}s
+            <b>Available resolutions:</b> {v.resolutions && v.resolutions.join(", ")}<br/>
+            <b>Duration:</b> {v.duration || "?"}s<br/>
+            <b>Status:</b> {v.status}
           </div>
         );
       })}
