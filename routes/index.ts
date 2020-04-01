@@ -42,8 +42,9 @@ router.get("/video/:id", requireAuth, async (req, res) => {
 
 });
 
-router.post("/upload", requireAuth, (req, res) => {
+router.post("/upload", requireAuth, async (req, res) => {
   const busboy = new Busboy({ headers: req.headers });
+  const db = await getDatabase(req);
 
   busboy.on("file", async (fieldname, file, filename, encoding, mimetype) => {
     console.log("Receiving file:", fieldname, filename, encoding, mimetype);
@@ -54,7 +55,11 @@ router.post("/upload", requireAuth, (req, res) => {
     try {
       await uploadToS3(newName, file);
       console.log("File saved as", newName)
-      encodeDash(newName);
+      const jobId = await encodeDash(newName);
+
+      await db.collection("videos").insertOne({
+        jobId, name: newName, status: "processing"
+      });
 
       res.send({
         status: "OK"
