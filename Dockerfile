@@ -5,6 +5,7 @@ WORKDIR /code
 
 RUN apk add --no-cache yarn git && \
     yarn install && \
+    yarn run webpack && \
     yarn cache clean
 
 EXPOSE 3000
