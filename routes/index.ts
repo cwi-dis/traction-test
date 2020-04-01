@@ -57,9 +57,15 @@ router.post("/upload", requireAuth, async (req, res) => {
       console.log("File saved as", newName)
       const jobId = await encodeDash(newName);
 
-      await db.collection("videos").insertOne({
-        jobId, name: newName, status: "processing"
-      });
+      if (jobId) {
+        await db.collection("videos").insertOne({
+          jobId, name: newName, status: "processing"
+        });
+      } else {
+        await db.collection("videos").insertOne({
+          jobId, name: newName, status: "error"
+        });
+      }
 
       res.send({
         status: "OK"

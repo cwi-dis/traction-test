@@ -66,7 +66,7 @@ export function uploadToS3(filename: string, file: aws.S3.Body, bucket = BUCKET_
   })
 }
 
-export function encodeDash(input: string): Promise<string> {
+export function encodeDash(input: string): Promise<string | undefined> {
   const inputBasename = input.split(".")[0];
 
   const params = {
@@ -117,7 +117,7 @@ export function encodeDash(input: string): Promise<string> {
         reject(err);
       } else {
         console.log(data);
-        resolve(data.Job.Id!);
+        resolve(data.Job?.Id);
       }
     });
   });
