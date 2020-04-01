@@ -207,9 +207,11 @@ export async function insertVideoMetadata(db: Db, data: any) {
     console.log("Entry in processing found");
 
     const result = await videos.updateOne({ jobId }, {
-      resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
-      duration: data.outputs[0].duration,
-      status: "complete"
+      "$set": {
+        resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
+        duration: data.outputs[0].duration,
+        status: "complete"
+      }
     });
 
     return result.modifiedCount == 1;
