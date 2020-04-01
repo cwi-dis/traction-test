@@ -32,7 +32,11 @@ const VideoStream: React.FC<VideoStreamProps> = (props) => {
       {videos.map((v, i) => {
         return (
           <div key={i} className="box">
-            <Link to={`/video/${v.name}`}>{v.name}</Link>
+            {(v.status === "complete") ? (
+              <Link to={`/video/${v.name}`}>{v.name}</Link>
+            ) : (
+              v.name
+            )}
             <hr/>
             <b>Available resolutions:</b> {v.resolutions && v.resolutions.join(", ")}<br/>
             <b>Duration:</b> {v.duration || "?"}s<br/>

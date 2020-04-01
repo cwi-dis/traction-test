@@ -117,7 +117,7 @@ export function encodeDash(input: string): Promise<string> {
         reject(err);
       } else {
         console.log(data);
-        resolve(data.Job.Id);
+        resolve(data.Job.Id!);
       }
     });
   });
