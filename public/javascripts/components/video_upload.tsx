@@ -38,6 +38,18 @@ const VideoUpload: React.FC<VideoUploadProps> = () => {
       ) : (
         <Dropzone size={["100%", 300]} onFileDropped={startUpload} />
       )}
+
+      {(displayNotification == "success") ? (
+        <div className="notification is-success fixed-notification">
+          <button className="delete"></button>
+          File successfully uploaded
+        </div>
+      ) : (displayNotification == "error") ? (
+        <div className="notification is-error fixed-notification">
+          <button className="delete"></button>
+          Could not upload file
+        </div>
+      ) : null}
     </>
   );
 };
