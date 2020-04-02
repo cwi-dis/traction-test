@@ -221,31 +221,24 @@ export function getFileExtension(filename: string): string {
 
 export async function insertVideoMetadata(db: Db, data: any) {
   const videos = db.collection("videos");
+  const { input: { key: name } } = data;
 
-  const { jobId } = data;
-  const processingEntryExists = await videos.findOne({ jobId, status: "processing" });
-
-  if (processingEntryExists) {
-    console.log("Entry in processing found");
-
-    if (data["state"] === "COMPLETED") {
-      const result = await videos.updateOne({ jobId }, {
-        "$set": {
-          resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
-          duration: data.outputs[0].duration,
-          status: "complete"
-        }
-      });
-
-      return result.modifiedCount == 1;
-    } else if (data["state"] === "ERROR") {
-      const result = await videos.updateOne({ jobId }, {
-        "$set": { status: "failed" }
-      });
-
-      return result.modifiedCount == 1;
+  const result = await videos.updateOne({ name }, {
+    "$set": {
+      resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
+      duration: data.outputs[0].duration,
+      status: "complete"
     }
-  }
+  });
 
-  return false;
+  return result.modifiedCount == 1;
+}
+
+export async function updateFailureState(db: Db, data: any) {
+  const videos = db.collection("videos");
+  const result = await videos.updateOne({ name }, {
+    "$set": { status: "failed" }
+  });
+
+  return result.modifiedCount == 1;
 }
