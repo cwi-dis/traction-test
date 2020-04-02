@@ -3,7 +3,7 @@ FROM node:13.10.1-alpine3.10
 ADD . /code/
 WORKDIR /code
 
-RUN apk add --no-cache yarn git && \
+RUN apk add --no-cache yarn git ffmpeg && \
     yarn install && \
     yarn run webpack && \
     yarn cache clean
