@@ -2497,6 +2497,11 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
+node-ffprobe@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/node-ffprobe/-/node-ffprobe-3.0.0.tgz#e6a9f6942fb2dc9c0897a68c9292a366b10bccd7"
+  integrity sha512-2LNTLStz2hw/urwo4xJ00TIOvthgepcl3tF4HB8BWnhJ4nhJ7S08YThapBHkGLYV+GUuY9pML/kX76+dqY2iUg==
+
 node-libs-browser@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/node-libs-browser/-/node-libs-browser-2.2.1.tgz#b64f513d18338625f90346d27b0d235e631f6425"
