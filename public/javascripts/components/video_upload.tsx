@@ -28,6 +28,10 @@ const VideoUpload: React.FC<VideoUploadProps> = () => {
     }
   };
 
+  const closeNotification = () => {
+    setDisplayNotification(undefined);
+  };
+
   return (
     <>
       <h1 className="title">Upload Video</h1>
@@ -41,12 +45,12 @@ const VideoUpload: React.FC<VideoUploadProps> = () => {
 
       {(displayNotification == "success") ? (
         <div className="notification is-success fixed-notification">
-          <button className="delete"></button>
+          <button className="delete" onClick={closeNotification}></button>
           File successfully uploaded
         </div>
       ) : (displayNotification == "error") ? (
         <div className="notification is-error fixed-notification">
-          <button className="delete"></button>
+          <button className="delete" onClick={closeNotification}></button>
           Could not upload file
         </div>
       ) : null}
