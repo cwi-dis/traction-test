@@ -66,7 +66,7 @@ export function uploadToS3(filename: string, file: aws.S3.Body, bucket = BUCKET_
   })
 }
 
-export function encodeDash(input: string): Promise<string | undefined> {
+export function encodeDash(input: string, hasAudio = true): Promise<string | undefined> {
   const inputBasename = input.split(".")[0];
 
   const params: aws.ElasticTranscoder.CreateJobRequest = {
@@ -107,6 +107,11 @@ export function encodeDash(input: string): Promise<string | undefined> {
       },
     ]
   };
+
+  if (!hasAudio) {
+    params.Outputs = params.Outputs.slice(0, -1);
+    params.Playlists[0].OutputKeys = params.Playlists[0].OutputKeys.slice(0, -1);
+  }
 
   return new Promise((resolve, reject) => {
     const transcoder = new aws.ElasticTranscoder();
