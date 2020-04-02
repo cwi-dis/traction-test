@@ -163,29 +163,34 @@ router.post("/sns", async (req, res) => {
     const topic = req.headers["x-amz-sns-topic-arn"];
 
     if (topic && topic === SNS_ARN!) {
-      const data= JSON.parse(req.body.Message);
+      const data = JSON.parse(req.body.Message);
       const db = await getDatabase(req);
 
       console.log("Received transcoder notification");
       console.log(data);
 
-      if (data.state == "COMPLETE" && data.userMetadata) {
-        switch (data.userMetadata?.task) {
-          case "encoding":
-            console.log("Starting playlist generation");
+      if (data.userMetadata) {
+        const { task } = data.userMetadata;
 
+        if (task === "encoding") {
+          console.log("Starting playlist generation");
+          const outputs = data.outputs.filter((o: any) => o.status === "Complete").map((o: any) => o.key);
+
+          if (outputs.length > 0) {
             generatePlaylist(
               data.input.key,
-              data.outputs.filter((o: any) => o.status === "Complete").map((o: any) => o.key)
+              outputs
             );
-
-            break;
-          case "playlistGeneration":
-            console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
+          } else {
+            console.error("No valid outputs found");
+            updateFailureState(db, data);
+          }
+        } else if (task === "playlistGeneration" && data.state === "COMPLETE") {
+          console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
+        } else {
+          console.error("Updating error state");
+          updateFailureState(db, data);
         }
-      } else if (data.state == "ERROR") {
-        console.error("Updating error state");
-        updateFailureState(db, data);
       }
     }
   }
