@@ -163,14 +163,11 @@ router.post("/sns", async (req, res) => {
 
     if (topic && topic === SNS_ARN!) {
       console.log("Received transcoder notification");
-      const data = JSON.parse(req.body.Message);
 
-      if (data["state"] == "COMPLETED") {
-        const db = await getDatabase(req);
-        console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
-      } else {
-        console.error("Transcoder error:", data);
-      }
+      const data = JSON.parse(req.body.Message);
+      const db = await getDatabase(req);
+
+      console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
     }
   }
 });
