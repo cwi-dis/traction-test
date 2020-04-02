@@ -6,6 +6,7 @@
     "start": "node --enable-source-maps ./bin/backend.js"
   },
   "dependencies": {
+    "@types/fluent-ffmpeg": "^2.1.14",
     "aws-sdk": "^2.641.0",
     "body-parser": "^1.19.0",
     "bulma": "^0.8.0",
@@ -19,10 +20,10 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "express-session": "^1.17.0",
+    "fluent-ffmpeg": "^2.1.2",
     "http-errors": "~1.6.3",
     "mongodb": "^3.5.5",
     "morgan": "~1.9.1",
-    "node-ffprobe": "^3.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
