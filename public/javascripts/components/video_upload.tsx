@@ -10,14 +10,22 @@ interface VideoUploadProps {
 const VideoUpload: React.FC<VideoUploadProps> = () => {
   const [ progress, setProgress ] = useState<number>(0);
   const [ total, setTotal ] = useState<number>(0);
+  const [ displayNotification, setDisplayNotification] = useState<"success" | "error">();
 
-  const startUpload = (file: File) => {
-    postFile("/upload", file, (progress) => {
-      setProgress(progress.loaded);
-      setTotal(progress.total);
-    }).then(() => {
+  const startUpload = async (file: File) => {
+    try {
+      await postFile("/upload", file, (progress) => {
+        setProgress(progress.loaded);
+        setTotal(progress.total);
+      });
+
+      setDisplayNotification("success");
+    } catch {
+      setDisplayNotification("error");
+    } finally {
       setTotal(0);
-    });
+      setTimeout(() => setDisplayNotification(undefined), 3000);
+    }
   };
 
   return (
