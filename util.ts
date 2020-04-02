@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
 import * as aws from "aws-sdk";
 
-const { BUCKET_NAME, ETS_PIPELINE } = process.env;
+const { BUCKET_NAME, ETS_PIPELINE, SNS_ENDPOINT_TYPE } = process.env;
 
 export function hashPassword(password: string) {
   if (!password) {
@@ -158,7 +158,7 @@ export function subscribeToSNSTopic(arn: string, endpoint: string): Promise<void
 
   return new Promise((resolve, reject) => {
     sns.subscribe({
-      Protocol: "https",
+      Protocol: SNS_ENDPOINT_TYPE || "http",
       TopicArn: arn,
       Endpoint: endpoint
     }, (err, data) => {
