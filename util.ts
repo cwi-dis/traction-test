@@ -94,40 +94,18 @@ export function encodeDash(input: string): Promise<string | undefined> {
         SegmentDuration: "10"
       }
     ],
-    UserMetadata: {
-      task: "encoding"
-    }
-  };
-
-  return new Promise((resolve, reject) => {
-    const transcoder = new aws.ElasticTranscoder();
-
-    transcoder.createJob(params, (err, data) => {
-      if (err) {
-        console.error(err);
-        reject(err);
-      } else {
-        console.log(data);
-        resolve(data.Job?.Id);
-      }
-    });
-  });
-}
-
-export function generatePlaylist(inputBasename: string, playlistEntries: Array<string>) {
-  const params: aws.ElasticTranscoder.CreateJobRequest = {
-    PipelineId: ETS_PIPELINE!,
-    OutputKeyPrefix: "transcoded/",
     Playlists: [
       {
         Format: "MPEG-DASH",
         Name: `${inputBasename}`,
-        OutputKeys: playlistEntries,
+        OutputKeys: [
+          `dash-4m-${inputBasename}`,
+          `dash-2m-${inputBasename}`,
+          `dash-1m-${inputBasename}`,
+          `dash-audio-${inputBasename}`,
+        ],
       },
-    ],
-    UserMetadata: {
-      task: "playlistGeneration"
-    }
+    ]
   };
 
   return new Promise((resolve, reject) => {

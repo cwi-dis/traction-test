@@ -4,8 +4,7 @@ import { v4 as uuid4 } from "uuid";
 
 import {
   getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash,
-  confirmSubscription, getFileExtension, insertVideoMetadata, generatePlaylist,
-  updateFailureState
+  confirmSubscription, getFileExtension, insertVideoMetadata, updateFailureState
 } from "../util";
 
 const { CLOUDFRONT_URL, SNS_ARN } = process.env;
@@ -169,28 +168,10 @@ router.post("/sns", async (req, res) => {
       console.log("Received transcoder notification");
       console.log(data);
 
-      if (data.userMetadata) {
-        const { task } = data.userMetadata;
-
-        if (task === "encoding") {
-          console.log("Starting playlist generation");
-          const outputs = data.outputs.filter((o: any) => o.status === "Complete").map((o: any) => o.key);
-
-          if (outputs.length > 0) {
-            generatePlaylist(
-              data.input.key,
-              outputs
-            );
-          } else {
-            console.error("No valid outputs found");
-            updateFailureState(db, data);
-          }
-        } else if (task === "playlistGeneration" && data.state === "COMPLETE") {
-          console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
-        } else {
-          console.error("Updating error state");
-          updateFailureState(db, data);
-        }
+      if (data.state === "COMPLETE") {
+        console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
+      } else {
+        console.error("Updating error state:", await updateFailureState(db, data));
       }
     }
   }
