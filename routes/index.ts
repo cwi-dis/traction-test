@@ -4,7 +4,8 @@ import { v4 as uuid4 } from "uuid";
 
 import {
   getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash,
-  confirmSubscription, getFileExtension, insertVideoMetadata
+  confirmSubscription, getFileExtension, insertVideoMetadata, generatePlaylist,
+  updateFailureState
 } from "../util";
 
 const { CLOUDFRONT_URL, SNS_ARN } = process.env;
@@ -162,12 +163,30 @@ router.post("/sns", async (req, res) => {
     const topic = req.headers["x-amz-sns-topic-arn"];
 
     if (topic && topic === SNS_ARN!) {
-      console.log("Received transcoder notification");
-
-      const data = JSON.parse(req.body.Message);
+      const data= JSON.parse(req.body.Message);
       const db = await getDatabase(req);
 
-      console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
+      console.log("Received transcoder notification");
+      console.log(data);
+
+      if (data.state == "COMPLETE" && data.userMetadata) {
+        switch (data.userMetadata?.task) {
+          case "encoding":
+            console.log("Starting playlist generation");
+
+            generatePlaylist(
+              data.input.key,
+              data.outputs.filter((o: any) => o.status === "Complete").map((o: any) => o.key)
+            );
+
+            break;
+          case "playlistGeneration":
+            console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
+        }
+      } else if (data.state == "ERROR") {
+        console.error("Updating error state");
+        updateFailureState(db, data);
+      }
     }
   }
 
