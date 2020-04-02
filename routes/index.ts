@@ -170,6 +170,8 @@ router.post("/sns", async (req, res) => {
       console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
     }
   }
+
+  res.send("");
 });
 
 export default router;
