@@ -20,7 +20,14 @@ router.get("/videos", requireAuth, async (req, res) => {
   const db = await getDatabase(req);
   const videos = await db.collection("videos").find().sort("_id", -1).toArray();
 
-  res.send(videos);
+  res.send(videos.map((v) => {
+    const mainThumbnail = v?.thumbnails?.[0];
+
+    return {
+      ...v,
+      mainThumbnail: (mainThumbnail) ? `${CLOUDFRONT_URL!}/transcoded/${mainThumbnail}` : undefined
+    }
+  }));
 });
 
 router.get("/video/:id", requireAuth, async (req, res) => {
