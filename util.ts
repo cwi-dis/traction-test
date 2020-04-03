@@ -78,19 +78,19 @@ export function encodeDash(input: string, hasAudio = true): Promise<string | und
     OutputKeyPrefix: "transcoded/",
     Outputs: [
       {
-        Key: `dash-4m-${inputBasename}`,
+        Key: `dash-4m/${inputBasename}`,
         PresetId: "1351620000001-500020",
         SegmentDuration: "10"
       }, {
-        Key: `dash-2m-${inputBasename}`,
+        Key: `dash-2m/${inputBasename}`,
         PresetId: "1351620000001-500030",
         SegmentDuration: "10"
       }, {
-        Key: `dash-1m-${inputBasename}`,
+        Key: `dash-1m/${inputBasename}`,
         PresetId: "1351620000001-500040",
         SegmentDuration: "10"
       }, {
-        Key: `dash-audio-${inputBasename}`,
+        Key: `dash-audio/${inputBasename}`,
         PresetId: "1351620000001-500060",
         SegmentDuration: "10"
       }
@@ -100,10 +100,10 @@ export function encodeDash(input: string, hasAudio = true): Promise<string | und
         Format: "MPEG-DASH",
         Name: `${inputBasename}`,
         OutputKeys: [
-          `dash-4m-${inputBasename}`,
-          `dash-2m-${inputBasename}`,
-          `dash-1m-${inputBasename}`,
-          `dash-audio-${inputBasename}`,
+          `dash-4m/${inputBasename}`,
+          `dash-2m/${inputBasename}`,
+          `dash-1m/${inputBasename}`,
+          `dash-audio/${inputBasename}`,
         ],
       },
     ]
