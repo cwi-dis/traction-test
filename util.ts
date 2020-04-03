@@ -2,6 +2,7 @@ import * as crypto from "crypto";
 import { Request, Response, NextFunction } from "express";
 import { Db } from "mongodb";
 import * as aws from "aws-sdk";
+import * as ffmpeg from "fluent-ffmpeg";
 
 const { BUCKET_NAME, ETS_PIPELINE, SNS_ENDPOINT_TYPE } = process.env;
 
@@ -226,4 +227,22 @@ export async function updateFailureState(db: Db, data: any) {
   });
 
   return result.modifiedCount == 1;
+}
+
+export function hasAudio(file: string): Promise<boolean> {
+  console.log("Determining if file", file, "has audio");
+
+  return new Promise((resolve, reject) => {
+    ffmpeg.ffprobe(file, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log(result);
+        const hasAudio = result.streams.some((stream) => stream.codec_type === "audio");
+
+        console.log("File has audio:", hasAudio);
+        resolve(hasAudio);
+      }
+    });
+  });
 }
