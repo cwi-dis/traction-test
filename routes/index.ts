@@ -168,7 +168,7 @@ router.post("/sns", async (req, res) => {
       console.log("Received transcoder notification");
       console.log(data);
 
-      if (data.state === "COMPLETE") {
+      if (data.state === "COMPLETED") {
         console.log("Inserting video metadata:", await insertVideoMetadata(db, data));
       } else {
         console.error("Updating error state:", await updateFailureState(db, data));
