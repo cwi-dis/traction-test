@@ -69,7 +69,7 @@ export function uploadToS3(filename: string, file: aws.S3.Body, bucket = BUCKET_
 export function encodeDash(input: string, hasAudio = true): Promise<string | undefined> {
   const inputBasename = input.split(".")[0];
 
-  const params: aws.ElasticTranscoder.CreateJobRequest = {
+  const params = {
     PipelineId: ETS_PIPELINE!,
     Input: {
       Key: input,
@@ -204,9 +204,9 @@ export function getFileExtension(filename: string): string {
 
 export async function insertVideoMetadata(db: Db, data: any) {
   const videos = db.collection("videos");
-  const { input: { key: name } } = data;
+  const { jobId } = data;
 
-  const result = await videos.updateOne({ name }, {
+  const result = await videos.updateOne({ jobId }, {
     "$set": {
       resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
       duration: data.outputs[0].duration,
@@ -219,7 +219,9 @@ export async function insertVideoMetadata(db: Db, data: any) {
 
 export async function updateFailureState(db: Db, data: any) {
   const videos = db.collection("videos");
-  const result = await videos.updateOne({ name }, {
+  const { jobId } = data;
+
+  const result = await videos.updateOne({ jobId }, {
     "$set": { status: "failed" }
   });
 
