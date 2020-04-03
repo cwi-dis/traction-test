@@ -6,6 +6,16 @@ import * as ffmpeg from "fluent-ffmpeg";
 
 const { BUCKET_NAME, ETS_PIPELINE, SNS_ENDPOINT_TYPE } = process.env;
 
+export function Range(start: number, end: number) {
+  if (start === end) {
+    return [];
+  }
+
+  return new Array(end - start).fill(null).map((_, i) => {
+    return start + i;
+  });
+}
+
 export function hashPassword(password: string) {
   if (!password) {
     password = "";
