@@ -1,0 +1,20 @@
+version: '2.2'
+services:
+  web:
+    build: .
+    restart: always
+    command: yarn start
+    ports:
+      - "80:3000"
+    depends_on:
+      - mongo
+    command: sh -c "/wait && yarn start"
+    environment:
+      - WAIT_HOSTS=mongo:27017
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ./db:/data/db
+    ports:
+      - "27017:27017"
