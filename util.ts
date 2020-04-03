@@ -216,13 +216,19 @@ export function getFileExtension(filename: string): string {
 
 export async function insertVideoMetadata(db: Db, data: any) {
   const videos = db.collection("videos");
-  const { jobId } = data;
+  const { jobId, outputs } = data;
+  const thumbnailPattern: string = outputs[0].thumbnailPattern;
+
+  const thumbnails = Range(0, Math.floor(outputs[0].duration / 300) + 1).map((n) => {
+    return thumbnailPattern.replace("{count}", n.toString().padStart(5, "0")) + ".png";
+  })
 
   const result = await videos.updateOne({ jobId }, {
     "$set": {
-      resolutions: data.outputs.filter((o: any) => o.height).map((o: any) => o.height),
-      duration: data.outputs[0].duration,
-      status: "complete"
+      resolutions: outputs.filter((o: any) => o.height).map((o: any) => o.height),
+      duration: outputs[0].duration,
+      status: "complete",
+      thumbnails
     }
   });
 
