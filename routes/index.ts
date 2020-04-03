@@ -1,10 +1,12 @@
 import { Router } from "express";
 import * as Busboy from "busboy";
 import { v4 as uuid4 } from "uuid";
+import * as tmp from "tmp-promise";
+import * as fs from "fs";
 
 import {
   getDatabase, hashPassword, requireAuth, isLoggedIn, uploadToS3, encodeDash,
-  confirmSubscription, getFileExtension, insertVideoMetadata, updateFailureState
+  confirmSubscription, getFileExtension, insertVideoMetadata, updateFailureState, hasAudio
 } from "../util";
 
 const { CLOUDFRONT_URL, SNS_ARN } = process.env;
@@ -52,30 +54,45 @@ router.post("/upload", requireAuth, async (req, res) => {
     const extension = getFileExtension(filename);
     const newName = uuid4() + extension;
 
-    try {
-      await uploadToS3(newName, file);
-      console.log("File saved as", newName)
-      const jobId = await encodeDash(newName);
+    const { fd, path, cleanup } = await tmp.file();
 
-      if (jobId) {
-        await db.collection("videos").insertOne({
-          jobId, name: newName, status: "processing"
+    const writeStream = fs.createWriteStream("", { fd, emitClose: true }).on("close", async () => {
+      try {
+        console.log("Temp file written");
+        const tmpReadStream = fs.createReadStream(path);
+
+        await uploadToS3(newName, tmpReadStream);
+        console.log("File saved as", newName)
+
+        const jobId = await encodeDash(
+          newName,
+          await hasAudio(path)
+        );
+
+        if (jobId) {
+          await db.collection("videos").insertOne({
+            jobId, name: newName, status: "processing"
+          });
+        } else {
+          await db.collection("videos").insertOne({
+            jobId, name: newName, status: "error"
+          });
+        }
+
+        res.send({
+          status: "OK"
         });
-      } else {
-        await db.collection("videos").insertOne({
-          jobId, name: newName, status: "error"
+      } catch {
+        res.send({
+          status: "ERR",
+          message: "Could not upload to S3"
         });
       }
 
-      res.send({
-        status: "OK"
-      });
-    } catch {
-      res.send({
-        status: "ERR",
-        message: "Could not upload to S3"
-      });
-    }
+      cleanup();
+    });
+
+    file.pipe(writeStream);
   });
 
   req.pipe(busboy);
