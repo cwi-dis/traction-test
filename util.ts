@@ -80,7 +80,8 @@ export function encodeDash(input: string, hasAudio = true): Promise<string | und
       {
         Key: `dash-4m/${inputBasename}`,
         PresetId: "1351620000001-500020",
-        SegmentDuration: "10"
+        SegmentDuration: "10",
+        ThumbnailPattern: `thumbnails/${inputBasename}_{count}`
       }, {
         Key: `dash-2m/${inputBasename}`,
         PresetId: "1351620000001-500030",
