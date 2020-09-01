@@ -34,8 +34,8 @@
     "uuid": "^7.0.2",
     "video.js": "^7.7.5",
     "videojs-contrib-dash": "^2.11.0",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
     "@types/busboy": "^0.2.3",
